@@ -10,9 +10,7 @@ import com.faithoyebode.dreamshops.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +25,12 @@ public class ProductService implements IProductService {
         //If Yes, set it as the product category
         //If No, save it as a new category in the DB
         //Then set it as the product category
-        List<Category> category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
-                .orElseGet(()->{
-                    Category newCategory = new Category(request.getCategory().getName());
-                    return Collections.singletonList(categoryRepository.save(newCategory));
-                });
+        List<Category> category = categoryRepository.findByName(request.getCategory().getName());
+        if (category.isEmpty()) {
+            Category newCategory = new Category(request.getCategory().getName());
+            Category savedCategory = categoryRepository.save(newCategory);
+            category = List.of(savedCategory);
+        }
         request.setCategory(category.get(0));
         return productRepository.save(createProduct(request, category.get(0)));
     }

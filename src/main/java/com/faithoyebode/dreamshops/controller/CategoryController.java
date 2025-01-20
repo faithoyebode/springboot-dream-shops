@@ -75,11 +75,11 @@ public class CategoryController {
     }
 
 
-    @PutMapping("/{name}")
-    public ResponseEntity<ApiResponse> updateCategory(@PathVariable String name){
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category){
         try {
-            List<Category> theCategory = categoryService.updateCategory(id);
-            return ResponseEntity.ok(new ApiResponse("Found!", categories));
+            Category theCategory = categoryService.updateCategory(category, id);
+            return ResponseEntity.ok(new ApiResponse("Updated!", theCategory));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND)
                     .body(new ApiResponse(e.getMessage(), null));
