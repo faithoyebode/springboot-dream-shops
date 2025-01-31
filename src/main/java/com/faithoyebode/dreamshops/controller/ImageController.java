@@ -23,8 +23,8 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class ImageController {
     private final IImageService imageService;
 
-    @PostMapping("/")
-    public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId){
+    @PostMapping("")
+    public ResponseEntity<ApiResponse> saveImages(@RequestBody List<MultipartFile> files, @RequestParam Long productId){
         try {
             List<ImageDto> imageDtos = imageService.saveImages(files, productId);
             return ResponseEntity.ok(new ApiResponse("Upload Success!", imageDtos));
